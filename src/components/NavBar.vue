@@ -5,13 +5,16 @@
     </div>
       <ul>
         <li>
-          <router-link to="/">home</router-link>
+          <div v-if="$route.path === '/'">Home</div>
+          <router-link v-else to="/">home</router-link>
         </li>
         <li>
-          <router-link to="/projects">projects</router-link>
+          <div v-if="$route.path === '/projects'">Projects</div>
+          <router-link v-else to="/projects">projects</router-link>
         </li>
         <li>
-          <router-link to="/persons">persons</router-link>
+          <div v-if="$route.path === '/persons'">Persons</div>
+          <router-link v-else to="/persons">persons</router-link>
 
           
         </li>
@@ -23,14 +26,15 @@
 
 <script>
 export default{
-  name: 'NavBar'
+  name: 'NavBar',
+
 }
 </script>
 
 
 <style  scoped>
 nav{
-  background: yellow;
+  background: #8D5EA5;
   height: 50px;
   padding: 10px;
   display: flex;
@@ -51,7 +55,7 @@ li{
 }
 a{
   text-decoration: none;
-  color: color #2c3e50;
+  color:  #B2Cb25;
   cursor: pointer;
   display: block;
   transition: transform .4s ease;
