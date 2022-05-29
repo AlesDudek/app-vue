@@ -1,30 +1,41 @@
 <template>
-  <nav-bar/>
-  <router-view/>
+
+<nav-bar/>
+
+<router-view />
+
 </template>
 
-
 <script>
-import NavBar from "./components/NavBar.vue";
+import NavBar from './components/NavBar.vue'
 
-export default{
+export default {
   name: 'App',
-  components: {  NavBar }
+  components: { NavBar }
 }
-
 </script>
 
-
 <style lang="stylus">
+@import './styles/variables.styl'
+
 #app
   font-family Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   text-align center
-  color #2c3e50
-  
-*{  
-  margin: 0;
-  padding: 0;
-  }
+  color $text
+
+body, html
+  margin: 0
+  padding: 0
+
+.bg-secondary
+  background: $secondary
+
+.text-light
+  color: $text-light
+
+.text-bold
+  font-weight: bold
+
 </style>
