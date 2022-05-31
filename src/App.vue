@@ -38,4 +38,7 @@ body, html
 .text-bold
   font-weight: bold
 
+.mb-2
+  margin-bottom: 2rem
+
 </style>

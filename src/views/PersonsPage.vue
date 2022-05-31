@@ -1,24 +1,20 @@
 <template>
 
-<h1>Persons</h1>
+  <h1>Persons</h1>
 
-<t-list title="osoba" titleRight="kontakty" :items="personsToDisplay"/>
+  <t-loading v-if="loading"/>
 
-  <!-- <li class="bg-secondary text-light text-bold">
-    <div>osoba</div>
-    <div>kontakty</div>
-  </li>
-  <li v-for="person in persons" :key="person.id" class="clickable">
-    <div>
-      <div class="title">{{ person.first + ' ' + person.last }}</div>
-      <div class="description">{{ person.skills ? person.position + ', ' + person.skills : person.position }}</div>
+  <template v-else>
+    <div class="mb-2">
+      <t-button @clicked="onClicked" label="add new" />
     </div>
-    <div class="dates">
-      <div class="description">{{ person.email }}</div>
-      <div class="description">{{ person.phone }}</div>
-    </div>
-  </li>
-</ul> -->
+    <t-list
+      title="osoba"
+      titleRight="kontakty"
+      :items="personsToDisplay"
+      route-to="persons"
+    />
+  </template>
 
 </template>
 
@@ -26,12 +22,15 @@
 
 import db from '../utils/db.js'
 import TList from '../components/TList.vue'
+import TLoading from '../components/TLoading.vue'
+import TButton from '../components/TButton.vue'
 
 export default {
   name: 'PersonsPage',
   data () {
     return {
-      persons: []
+      persons: [],
+      loading: true
     }
   },
   computed: {
@@ -53,9 +52,15 @@ export default {
   created () {
     db.get('persons').then(data => {
       this.persons = data
+      this.loading = false
     })
   },
-  components: { TList }
+  methods: {
+    onClicked () {
+      this.$router.push('/personform')
+    }
+  },
+  components: { TList, TLoading, TButton }
 }
 
 </script>

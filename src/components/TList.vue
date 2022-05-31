@@ -6,7 +6,7 @@
       <div>{{ titleRight }}</div>
     </li>
 
-    <li v-for="item in items" :key="item.id" class="clickable">
+    <li v-for="item in items" :key="item.id" class="clickable" @click="onClick(item.id)">
       <div>
         <div class="title">{{ item.title }}</div>
         <div class="description">{{ item.description }}</div>
@@ -33,6 +33,15 @@ export default {
     },
     items: {
       type: Array
+    },
+    routeTo: {
+      type: String
+    }
+  },
+  methods: {
+    onClick (id) {
+      const route = '/' + this.routeTo + '/' + id
+      this.$router.push(route)
     }
   }
 }
