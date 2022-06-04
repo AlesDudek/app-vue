@@ -118,7 +118,7 @@ import TButton from '../components/TButton.vue'
 form
   width: 80%
   max-width: 500px
-  margin: 0 auto
+  margin: 0 auto 3rem auto
 
 .form-control
   display: flex
