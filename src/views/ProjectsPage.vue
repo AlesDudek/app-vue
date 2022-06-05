@@ -24,8 +24,6 @@ import { formatDate } from '../utils/dateUtils.js'
 import TLoading from '../components/TLoading.vue'
 import TButton from '../components/TButton.vue'
 
-
-
 export default {
   name: 'ProjectsPage',
   data () {

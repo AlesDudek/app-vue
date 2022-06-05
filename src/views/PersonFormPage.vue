@@ -1,116 +1,110 @@
 <template>
-  <h1>{{title}}</h1>
+  <h1>{{ title }}</h1>
+
   <form @submit="onSubmit">
-    <div class="form-control">
-      <label for="first">first name</label>
 
-      <input id='first' type="text"
-      autocomplete="off"
-      v-model="person.first"
+    <t-control
+      v-for="klic in controlsKeys"
+      :key="klic"
+      :control="klic"
+      :label="controls[klic].label"
+      :value="person[klic]"
+      :type="controls[klic].type"
+      @has-input="onHasInput"
+    />
 
-      >
-
-    </div>
-
-    <div class="form-control">
-      <label for="last">last name</label>
-      
-      <input id='last' type="text"
-      autocomplete="off"
-      v-model="person.last"
-
-      >
-
-    </div>
-    <div class="form-control">
-      <label for="position">position</label>
-      
-      <input id='position' type="text"
-      autocomplete="off"
-      v-model="person.position"
-      >
-
-    </div>
-    <div class="form-control">
-      <label for="skills">skills</label>
-      
-      <input id='skills' type="text"
-      autocomplete="off"
-      v-model="person.skills"
-      >
-
-    </div>
-    <div class="form-control">
-      <label for="email">email</label>
-      
-      <input id='email' type="email"
-      autocomplete="off"
-      v-model="person.email"
-      >
-
-    </div>
-    <div class="form-control">
-      <label for="phone">phone</label>
-      
-      <input id='phone' type="tel"
-      autocomplete="off"
-      v-model="person.phone"
-      >
-
-    </div>
-    <t-button label='submit'/>
+    <t-button label="submit" />
   </form>
 </template>
 
 <script>
-import db from '../utils/db.js'
-import TButton from '../components/TButton.vue'
+  import db from '../utils/db.js'
+  import TButton from '../components/TButton.vue'
+  import TControl from '../components/TControl.vue'
+
 
   export default {
     name: 'PersonFormPage',
-    computed:{
-      title(){
-        if( this.$route.params.id ){
-          return'edit person'
+    data () {
+      return {
+        person: {
+          first: '',
+          last: '',
+          position: '',
+          skills: '',
+          email: '',
+          phone: ''
+        },
+        controls: {
+          first: {
+            type: 'text',
+            label: 'first name'
+          },
+          last: {
+            type: 'text',
+            label: 'last name'
+          },
+          email: {
+            type: 'email',
+            label: 'email'
+          },
+          phone: {
+            type: 'tel',
+            label: 'phone'
+          },
+          position: {
+            type: 'text',
+            label: 'position',
+          },
+          skills: {
+            type: 'text',
+            label: 'skills'
+          },
         }
-        return'add person'
       }
     },
-    created (){
-      if(this.$route.params.id){
+    created () {
+      if (this.$route.params.id) {
         db.get('persons/' + this.$route.params.id).then(record => {
           this.person = record
         })
       }
     },
-    data(){
-      return {
-        person: {
-          first: '',
-          last:  '',
-          position: '',
-          skills: '',
-          email: '',
-          phone: '',
-        }
+    computed: {
+      title () {
+        return this.$route.params.id ? 'edit person' : 'add person'
+      },
+      controlsKeys () {
+        return Object.keys(this.controls) // ['first', 'last', 'email' ...]
       }
     },
-    methods:{
-      onSubmit(e){
+    /*
+      voláme databázi a píšeme název db tabulky
+        - je jedno jestli píšu první lomítko (db si ho doplní kdyžtak sama)
+      jsme v routeru a píšeme cestu (path)
+        - ta musí začínat prvním lomítkem
+      jsme v routeru a chceme za cestu ještě přidat parametr
+        - musíme psát první lomítko - viz výše
+        - musíme psát lomítko za path a za něj teprv parametr
+    */
+    methods: {
+      onSubmit (e) {
         e.preventDefault()
         if (!this.$route.params.id) {
-        return db.post('persons', this.person).then(() => {
-          this.$router.push('/persons')
+          return db.post('persons', this.person).then(() => {
+            this.$router.push('/persons')
+          })
+        }
+        return db.put('persons', this.person).then(() => {
+          this.$router.push('/persons/' + this.$route.params.id)
         })
-      }
-      return db.put('persons', this.person).then(() => {
-        this.$router.push('/persons/' + this.$route.params.id)
-      })
-      }
+      },
+      onHasInput (payload) {
+        this.person[payload.control] = payload.value
+      },
     },
-    components: { TButton }
+    components: { TButton, TControl }
   }
-
 </script>
 
 <style lang="stylus" scoped>
@@ -119,16 +113,5 @@ form
   width: 80%
   max-width: 500px
   margin: 0 auto 3rem auto
-
-.form-control
-  display: flex
-  flex-direction: column
-  text-align: left
-  margin-bottom: 2rem
-
-.form-control input
-  font-size: 1.2rem
-  padding: .35em .75em
-
-
+  
 </style>
